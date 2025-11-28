@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mongodb"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String  
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  username      String    @unique @default(nanoid())
+  image         String?
+  role          String?
+  accounts      Account[]
+  sessions      Session[]
+  Post          Post[]
+  createdAt     DateTime  @default(now())
+}
+
+model VerificationRequest {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
+  createdAt   DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, token])
+}
+
+model Post {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  slug      String     @unique
+  content   String
+  thumbnail String?
+  desc      String?
+  keywords  String?
+  excerpt   String?
+  catSlug   String
+  category  Category?  @relation(fields: [catSlug], references: [slug])
+  createdAt DateTime   @default(now())
+  authorId  String     @db.ObjectId
+  author    User       @relation(fields: [authorId], references: [id])
+  status    PostStatus @default(DRAFT)
+}
+
+model Category {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  slug  String @unique
+  posts Post[]
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  DELETED
+  ARCHIVED
+}

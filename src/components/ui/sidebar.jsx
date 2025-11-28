@@ -43,7 +43,7 @@ function useSidebar() {
 }
 
 function SidebarProvider({
-  defaultOpen = true,
+  defaultOpen = false,
   open: openProp,
   onOpenChange: setOpenProp,
   className,
@@ -546,10 +546,8 @@ function SidebarMenuBadge({ className, ...props }) {
 }
 
 function SidebarMenuSkeleton({ className, showIcon = false, ...props }) {
-  // Random width between 50 to 90%.
-  const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  }, []);
+  // Fixed width for SSR-safe skeleton (avoid Math.random on server/client)
+  const width = "75%";
 
   return (
     <div
@@ -565,11 +563,8 @@ function SidebarMenuSkeleton({ className, showIcon = false, ...props }) {
         />
       )}
       <Skeleton
-        className="h-4 max-w-(--skeleton-width) flex-1"
+        className="h-4 w-3/4 flex-1"
         data-sidebar="menu-skeleton-text"
-        style={{
-          "--skeleton-width": width,
-        }}
       />
     </div>
   );

@@ -1,7 +1,25 @@
 import { Anvil } from "lucide-react";
 import Link from "next/link";
 
-export default function Navbar() {
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { getAuthsession } from "@/lib/auth";
+import SignOut from "./signout";
+
+const tempUser = {
+  username: "Anuj",
+};
+
+export default async function Navbar() {
+  const session = await getAuthsession();
+
   return (
     <nav className="w-full bg-transparent">
       <div className="container mx-auto px-4">
@@ -32,32 +50,37 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Link
-              href="/sign-in"
-              className="text-sm px-3 py-1 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition"
-            >
-              Get Started
+          {session ? (
+            <div className="flex items-center gap-3">
+              <UserModalComponent user={session.user} />
+            </div>
+          ) : (
+            <Link href="/sign-in" className="flex items-center gap-3">
+              Sign In
             </Link>
-            <button className="md:hidden p-2 rounded-md hover:bg-accent/10">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
-          </div>
+          )}
         </div>
       </div>
     </nav>
   );
 }
+
+const UserModalComponent = ({ user }) => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>User</DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>{user.username}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <Link href={`/user/${user.username}`}> Go To Profile</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>Billing</DropdownMenuItem>
+        <DropdownMenuItem>Team</DropdownMenuItem>
+        <DropdownMenuItem>
+          <SignOut />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};

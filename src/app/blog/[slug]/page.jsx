@@ -9,6 +9,9 @@ export default function SingleBlog() {
     <p>Demo Content </p>
   `;
 
+  // Use a deterministic published date to avoid SSR/client hydration mismatches
+  const publishedDate = "2025-11-26T00:00:00.000Z";
+
   return (
     <section className="py-12">
       <div className="container mx-auto px-4">
@@ -28,7 +31,7 @@ export default function SingleBlog() {
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Calendar className="size-4 text-muted-foreground" />
-                  <time>{dateFormatFunc(new Date())}</time>
+                  <time>{dateFormatFunc(publishedDate)}</time>
                 </div>
                 <div className="mx-1">•</div>
                 <div className="text-xs flex items-center gap-2">
