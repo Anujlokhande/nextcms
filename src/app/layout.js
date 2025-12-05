@@ -29,7 +29,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark no-scrollbar">
-      <body className={`${popins.className} antialiased`}>
+      <body
+        className={`${popins.className} antialiased`}
+        suppressHydrationWarning
+      >
         <AuthProvider>
           <SidebarProvider>
             <AppSidebar />
