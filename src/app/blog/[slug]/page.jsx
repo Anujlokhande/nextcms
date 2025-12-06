@@ -5,7 +5,8 @@ import Link from "next/link";
 
 const fetchPost = async (slug) => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/get/${slug}`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/get/${slug}`,
+    { next: { tags: [slug] } }
   );
   const data = await res.json();
   console.log(data, " Single post data");

@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function ImageUpload({ returnImage }) {
+export default function ImageUpload({ returnImage, preLoadedImage }) {
   const [imageUrl, setImageUrl] = useState(false);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    console.log(preLoadedImage);
+  }, [preLoadedImage]);
 
   const handleImageAsFile = async (e) => {
     if (e && typeof e.preventDefault === "function") e.preventDefault();
@@ -24,6 +27,38 @@ export default function ImageUpload({ returnImage }) {
       returnImage(json.url);
     } else alert(json.error || "upload failed");
   };
+
+  if (preLoadedImage) {
+    return (
+      <>
+        <div className="flex gap-2">
+          <input
+            className="w-1/3 px-3 py-1 rounded border border-gray-500 border-dashed"
+            placeholder="Enter Cover Image Url"
+            type="file"
+            onChange={(e) => {
+              setFile(e.target.files?.[0] ?? null);
+            }}
+          />
+          <button
+            className="border border-gray-500 rounded w-30 px-3 py-1"
+            type="button"
+            onClick={handleImageAsFile}
+            disabled={loading || !file}
+          >
+            {loading ? "Uploading..." : "Update"}
+          </button>
+        </div>
+        <div className="mt-4 w-32 h-32 rounded border border-gray-300">
+          <img
+            src={preLoadedImage}
+            alt="preview"
+            className="w-full h-full object-cover rounded"
+          />
+        </div>
+      </>
+    );
+  }
 
   return (
     <div>

@@ -79,14 +79,15 @@ import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
 import { slugify } from "slugmaster";
 import ImageUpload from "./ImageUpload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // SSR OFF
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
-export default function Editor({ onSave }) {
+export default function Editor({ onSave, initialData }) {
   const [ogImage, setOgImage] = useState("");
-  const { register, handleSubmit, control } = useForm({
+
+  const { register, handleSubmit, control, setValue } = useForm({
     defaultValues: {
       title: "",
       keywords: "",
@@ -94,11 +95,26 @@ export default function Editor({ onSave }) {
     },
   });
 
+  useEffect(() => {
+    if (initialData) {
+      console.log(initialData);
+
+      setValue("title", initialData.title);
+      setValue("content", initialData.content);
+      setValue("excerpt", initialData.excerpt);
+      // support both `category` and `catSlug` coming from the API
+      setValue("category", initialData.category ?? initialData.catSlug);
+      setValue("keywords", initialData.keywords);
+      setValue("metaDescription", initialData.desc);
+      setValue("status", initialData.status);
+      // populate ogImage preview if available
+      if (initialData.thumbnail) setOgImage(initialData.thumbnail);
+    }
+  }, [initialData]);
+
   const handleForm = (data) => {
     const generatedSlug = slugify(data.title);
-    console.log(ogImage);
-
-    // onSave({ ...data, slug: generatedSlug, ogImage });
+    onSave({ ...data, slug: generatedSlug, ogImage });
     // console.log("FORM DATA:", data);
   };
 
@@ -164,7 +180,7 @@ export default function Editor({ onSave }) {
           type="text"
         />
         <h2 className="text-xl font-bold">SEO Data</h2>
-        <ImageUpload returnImage={setOgImage} />
+        <ImageUpload returnImage={setOgImage} preLoadedImage={ogImage} />
         <input
           {...register("keywords")}
           placeholder="Enter Keywords"
