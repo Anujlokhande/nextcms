@@ -96,8 +96,9 @@ export default function Editor({ onSave }) {
 
   const handleForm = (data) => {
     const generatedSlug = slugify(data.title);
+    console.log(ogImage);
 
-    onSave({ ...data, slug: generatedSlug, ogImage });
+    // onSave({ ...data, slug: generatedSlug, ogImage });
     // console.log("FORM DATA:", data);
   };
 

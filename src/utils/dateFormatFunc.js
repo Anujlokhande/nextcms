@@ -1,11 +1,21 @@
 export default function dateFormatFunc(date) {
+  let tempDate;
+
   if (date instanceof Date) {
-    return new Date(date).toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
+    tempDate = date;
+  } else if (typeof date == "string") {
+    tempDate = new Date(date);
   } else {
     return "";
   }
+
+  if (isNaN(tempDate)) {
+    return "";
+  }
+
+  return tempDate.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 }
