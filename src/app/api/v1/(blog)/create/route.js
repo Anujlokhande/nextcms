@@ -56,7 +56,6 @@ export async function POST(request) {
         status: statusOfPost,
       },
     });
-    console.log(categoryCheck);
 
     return NextResponse.json(post, { status: 201 });
   } catch (error) {

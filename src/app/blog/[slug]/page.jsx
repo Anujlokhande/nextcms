@@ -2,14 +2,18 @@ import dateFormatFunc from "@/utils/dateFormatFunc";
 import { Calendar } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 const fetchPost = async (slug) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/get/${slug}`,
     { next: { tags: [slug] } }
   );
+  if (res.status == 404) {
+    notFound();
+  }
   const data = await res.json();
-  console.log(data, " Single post data");
+  // console.log(data, " Single post data");
   return data;
 };
 

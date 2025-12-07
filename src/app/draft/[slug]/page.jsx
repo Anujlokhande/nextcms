@@ -18,13 +18,11 @@ export default function EditPrevDraft({ params }) {
 
       if (!res.ok) {
         if (res.status === 403) {
-          toast({
-            title: "Oh-oo",
+          toast.error("Oh-oo", {
             description: "You are not authorized to edit",
           });
         } else {
-          toast({
-            title: "Oh-oo",
+          toast.error("Oh-oo", {
             description: "Unable to load post",
           });
         }

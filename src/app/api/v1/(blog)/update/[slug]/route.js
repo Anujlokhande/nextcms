@@ -22,7 +22,7 @@ export async function PUT(request, { params }) {
   } = body;
 
   const session = await getServerSession(authOptions);
-  console.log(session);
+  // console.log(session);
   const Admin = await isAdmin(session);
   const post = await prisma.post.findUnique({
     where: {

@@ -5,9 +5,14 @@ export default async function isAdmin(session) {
     console.log("Session is not available");
     return false;
   }
-  let emailMatch = adminEmail.map((each, idx) => {
-    each.toLowerCase().trim().includes(session.user.email.toLowerCase().trim());
+  // console.log(session.user);
+
+  const userEmail = await session.user.email.toLowerCase().trim();
+  let emailMatch = adminEmail.some((each) => {
+    return each.toLowerCase().trim().includes(userEmail);
   });
+  // console.log(emailMatch);
+
   if (session.user.role == "admin" || (session.user?.email && emailMatch)) {
     return true;
   }

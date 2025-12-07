@@ -6,9 +6,9 @@ export default function ImageUpload({ returnImage, preLoadedImage }) {
   const [imageUrl, setImageUrl] = useState(false);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    console.log(preLoadedImage);
-  }, [preLoadedImage]);
+  // useEffect(() => {
+  //   console.log(preLoadedImage);
+  // }, [preLoadedImage]);
 
   const handleImageAsFile = async (e) => {
     if (e && typeof e.preventDefault === "function") e.preventDefault();
