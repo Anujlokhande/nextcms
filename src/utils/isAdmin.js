@@ -7,7 +7,7 @@ export default async function isAdmin(session) {
   }
   // console.log(session.user);
 
-  const userEmail = await session.user.email.toLowerCase().trim();
+  const userEmail = await session.user?.email.toLowerCase().trim();
   let emailMatch = adminEmail.some((each) => {
     return each.toLowerCase().trim().includes(userEmail);
   });
