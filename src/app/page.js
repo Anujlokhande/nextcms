@@ -61,7 +61,7 @@ export default function Home() {
             Ready To Transform Your Content Journey{" "}
           </h4>
           <p className="text-sm text-gray-400">
-            Join thousends of content creators{" "}
+            Join thousands of content creators{" "}
           </p>
           <div className="flex gap-2">
             <Input type="email" placeholder="Enter Email" />

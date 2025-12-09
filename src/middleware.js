@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { rateLimit } from "./utils/rate-limit";
 
 export default async function middleware(request) {
-  const allowedOrigins = ["http://localhost:3000"];
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "https://nextcms-opal.vercel.app/",
+  ];
 
   if (request.method == "POST") {
     const origin = request.headers.get("origin");

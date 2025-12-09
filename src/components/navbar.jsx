@@ -70,13 +70,12 @@ const UserModalComponent = ({ user }) => {
     <DropdownMenu>
       <DropdownMenuTrigger>User</DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>{user.username}</DropdownMenuLabel>
+        <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <Link href={`/user/${user.username}`}> Go To Profile</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
+
         <DropdownMenuItem>
           <SignOut />
         </DropdownMenuItem>

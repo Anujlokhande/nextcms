@@ -13,6 +13,14 @@ export default async function AllPosts({ searchParams }) {
   const category = params.cat || null;
 
   const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        You are not Authenticated
+      </div>
+    );
+  }
   const admin = await isAdmin(session);
   if (!admin) {
     return <UserAllPosts page={page} category={category} user={session.user} />;
