@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
 
 async function fectchAllUser() {
   const res = await prisma.user.findMany();

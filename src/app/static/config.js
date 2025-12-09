@@ -1,3 +1,3 @@
 export const config = {
-  perPage: 2,
+  perPage: 5,
 };
