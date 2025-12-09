@@ -227,6 +227,7 @@ export default function Editor({ onSave, initialData }) {
             Generate content using AI <Sparkles />
           </DialogTrigger>
           <DialogContent>
+            <DialogTitle>Generate</DialogTitle>
             <DialogHeader>
               <DialogDescription>
                 Give a brief on the type of content you want to generate
