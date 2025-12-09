@@ -26,7 +26,7 @@ export default async function Navbar() {
         <div className="flex items-center justify-between h-14">
           <Link href="/" className="flex items-center gap-2">
             <Anvil className="size-5" />
-            <span className="font-extrabold text-lg">CMS</span>
+            <span className="font-extrabold text-lg">NextCMS</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-6">

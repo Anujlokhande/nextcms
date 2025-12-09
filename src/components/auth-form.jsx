@@ -25,7 +25,7 @@ export default function AuthForm({ origin }) {
       <div className="w-full max-w-md space-y-6">
         <div className="flex items-center justify-center gap-2">
           <Anvil className="size-6 text-primary" />
-          <h1 className="text-2xl font-bold">CMS</h1>
+          <h1 className="text-2xl font-bold">NextCMS</h1>
         </div>
 
         <div className="space-y-2">
@@ -33,7 +33,7 @@ export default function AuthForm({ origin }) {
             {origin == "signup" ? "Sign Up" : "Sign In"}
           </h2>
           <p className="text-center text-sm text-muted-foreground">
-            Welcome, by continuing with CMS signin, you'll be extraordinary
+            Welcome, by continuing with NextCMS signin, you'll be extraordinary
           </p>
         </div>
 
@@ -59,7 +59,7 @@ export default function AuthForm({ origin }) {
           </p>
         ) : (
           <p className="text-sm text-gray-400 text-center">
-            New to CMS?{" "}
+            New to NextCMS?{" "}
             <Link className="underline" href="/sign-up">
               Sign up
             </Link>

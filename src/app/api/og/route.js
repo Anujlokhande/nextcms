@@ -12,7 +12,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
 
-    let rawTitle = searchParams.get("title") || "CMS";
+    let rawTitle = searchParams.get("title") || "NextCMS";
     const title = rawTitle.charAt(0).toUpperCase() + rawTitle.slice(1);
 
     return new ImageResponse(
@@ -34,7 +34,7 @@ export async function GET(request) {
             {title}
           </h1>
 
-          <h2 tw="text-[32px] opacity-70">Powered By CMS</h2>
+          <h2 tw="text-[32px] opacity-70">Powered By NextCMS</h2>
         </div>
       ),
       {
