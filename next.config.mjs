@@ -1,13 +1,24 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  devIndicators: {
+    buildActivity: false, // hide bottom-right Next.js icon
+  },
+
   reactCompiler: true,
+
   images: {
-    // allow Cloudinary images served from this host
-    domains: ["res.cloudinary.com", "lh3.googleusercontent.com"],
-    // if you need more granular control, use `remotePatterns`
-    // remotePatterns: [
-    //   { protocol: 'https', hostname: 'res.cloudinary.com', pathname: '/**' }
-    // ]
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "/**",
+      },
+    ],
   },
 };
 
