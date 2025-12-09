@@ -5,10 +5,25 @@ import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
 import { slugify } from "slugmaster";
 import ImageUpload from "./ImageUpload";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
+import { Button } from "./ui/button";
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import AiContent from "@/utils/ai-content";
+import { fi } from "zod/v4/locales";
+import { Sparkle, Sparkles } from "lucide-react";
 
 // SSR OFF
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
@@ -32,6 +47,11 @@ const schema = z.object({
 export default function Editor({ onSave, initialData }) {
   const [ogImage, setOgImage] = useState("");
   const router = useRouter();
+  const ideaRef = useRef(null);
+  const closeDialog = useRef(null);
+  const quillRef = useRef(null);
+  const [selectExist, setSelectExist] = useState(false);
+
   const { register, handleSubmit, control, setValue } = useForm({
     defaultValues: {
       title: "",
@@ -73,6 +93,57 @@ export default function Editor({ onSave, initialData }) {
     } catch (error) {
       console.error(error.message);
     }
+  };
+
+  const handleGenerateUsingAI = async () => {
+    try {
+      const res = await AiContent({
+        text: ideaRef.current.value,
+        customInstructions: "Generate Content With Proper Facts",
+        contentGen: true,
+      });
+      setValue("content", res);
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      closeDialog.current?.click();
+    }
+  };
+
+  const handleRephrase = async () => {
+    const selection = quillRef.current?.getEditor().getSelection();
+    if (selection && selection.length > 0) {
+      try {
+        const selectedText = quillRef.current
+          .getEditor()
+          .getText(selection.index, selection.length);
+        const res = await AiContent({
+          text: selectedText,
+          customInstructions: "Rewrite This Text",
+          contentGen: false,
+        });
+        quillRef?.current
+          .getEditor()
+          .deleteText(selection.index, selection.length);
+        quillRef?.current.getEditor().insertText(selection.index, res);
+        setSelectExist(false);
+      } catch (error) {
+        console.error(error.message);
+        toast.error("Uh-oh", {
+          description: "Content Rephrasing Failed",
+        });
+      }
+    } else {
+      toast.error("Uh-oh", {
+        description: "Please Select Some Text To Rephrase",
+      });
+    }
+  };
+
+  const handleSelectionChange = () => {
+    const selection = quillRef.current?.getEditor().getSelection();
+    // console.log(selection);
+    setSelectExist(selection && selection.length > 0);
   };
 
   return (
@@ -119,6 +190,8 @@ export default function Editor({ onSave, initialData }) {
           control={control}
           render={({ field }) => (
             <ReactQuill
+              ref={quillRef}
+              onChangeSelection={handleSelectionChange}
               theme="snow"
               value={field.value}
               onChange={field.onChange}
@@ -148,6 +221,30 @@ export default function Editor({ onSave, initialData }) {
             />
           )}
         />
+
+        <Dialog>
+          <DialogTrigger className="flex gap-2 items-center border-2 p-2 rounded">
+            Generate content using AI <Sparkles />
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogDescription>
+                Give a brief on the type of content you want to generate
+              </DialogDescription>
+              <textarea
+                ref={ideaRef}
+                className="bg-zinc-800 p-2 rounded outline-none"
+                rows={10}
+              />
+            </DialogHeader>
+            <DialogFooter>
+              <Button onClick={handleGenerateUsingAI}>Generate</Button>
+              <DialogClose asChild ref={closeDialog}>
+                <Button variant="ghost">Close</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
         <input
           {...register("excerpt")}
           placeholder="Enter excerpt"
@@ -188,9 +285,18 @@ export default function Editor({ onSave, initialData }) {
           >
             Save
           </button>
+          {/* <Button variant="outline">Rewite Using AI</Button> */}
         </div>
       </form>
-
+      {selectExist && (
+        <Button
+          className="fixed bottom-10 right-10"
+          variant="outline"
+          onClick={handleRephrase}
+        >
+          Rewite Using AI <Sparkles></Sparkles>
+        </Button>
+      )}
       {/* ----- SUBMIT BUTTON OUTSIDE THE FORM ----- */}
     </section>
   );

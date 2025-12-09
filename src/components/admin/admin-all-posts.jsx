@@ -11,8 +11,8 @@ export default async function AdminAllPosts({ page, category }) {
     <section className="p-8 flex flex-col gap-4">
       <h2>Manage All Blogs</h2>
       <CategoryFilter />
-      {posts.map((post) => {
-        return <EditableAllPost post={post} />;
+      {posts.map((post, idx) => {
+        return <EditableAllPost key={idx} post={post} />;
       })}
       <Pagination
         className="fixed bottom-10 left-1/2 -translate-1/2"

@@ -32,6 +32,7 @@ export default function Pagination({
         {Array.from({ length: totalPage }, (_, idx) => {
           return (
             <button
+              key={idx}
               onClick={() => {
                 handlePageChange(idx + 1);
               }}

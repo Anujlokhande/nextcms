@@ -3,6 +3,7 @@
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "../ui/button";
 
 export default function EditableAllPost({ post }) {
   const router = useRouter();
@@ -92,6 +93,12 @@ export default function EditableAllPost({ post }) {
               Publish
             </button>
           )}
+          <Button
+            onClick={() => router.push(`/draft/${post.slug}`)}
+            variant="outline"
+          >
+            Edit
+          </Button>
           {currStatus == "PUBLISHED" ? (
             <button
               className="text-black bg-gray-400/60 rounded-sm p-2 text-sm w-[70px] "
