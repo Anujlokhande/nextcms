@@ -4,25 +4,30 @@ import { rateLimit } from "./utils/rate-limit";
 export default async function middleware(request) {
   const allowedOrigins = [
     "http://localhost:3000",
-    "https://nextcms-opal.vercel.app/",
+    "https://nextcms-opal.vercel.app",
   ];
 
-  if (request.method == "POST") {
+  if (request.method === "POST") {
     const origin = request.headers.get("origin");
-    if (!allowedOrigins.includes(origin)) {
+
+    if (origin && !allowedOrigins.includes(origin)) {
       return NextResponse.json(
         { message: "Unauthorized Origin" },
         { status: 403 }
       );
     }
-    let ip = request.ip || request.headers.get("x-forwaded-for") || "unknown";
+
+    let ip = request.ip || request.headers.get("x-forwarded-for") || "unknown";
+
     const { limit, remaining, reset } = await rateLimit.limit(ip);
-    if (remaining == 0) {
+
+    if (remaining === 0) {
       return NextResponse.json(
         { message: "You Have Reached Req Limit" },
         { status: 429 }
       );
     }
+
     return NextResponse.next();
   }
 }
